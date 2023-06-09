@@ -7,6 +7,6 @@ Feature: Registering packages
     - A Package that cannot be allocated goes to a waiting queue
 
   Scenario: There is space for allocating package
-    Given Merry brings a package
-    When package is registered
-    Then it is assigned to a container
+    When Merry registers a package
+    Then first available container is located
+    And he puts the package into it

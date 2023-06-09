@@ -4,19 +4,27 @@ require_relative "../../lib/app/for_registering_packages/register_package/regist
 require_relative "../../lib/app/for_registering_packages/register_package/register_package_handler"
 require_relative "../../lib/app/for_registering_packages/available_container/available_container"
 require_relative "../../lib/app/for_registering_packages/available_container/available_container_handler"
+require_relative "../../lib/app/for_registering_packages/store_package/store_package"
+require_relative "../../lib/app/for_registering_packages/store_package/store_package_handler"
 
-Given("Merry brings a package") do
-  @register_package = RegisterPackage.new
-end
-
-When("package is registered") do
+Given("Merry registers a package") do
+  @locator = "some-locator"
+  register_package = RegisterPackage.new @locator
   register_package_handler = RegisterPackageHandler.new
-  register_package_handler.handle(@register_package)
+  register_package_handler.handle(register_package)
 end
 
-Then("it is assigned to a container") do
-  what_container_is_assigned = AvailableContainer.new
-  what_container_is_assigned_handler = AvailableContainerHandler.new
-  response = what_container_is_assigned_handler.handle(what_container_is_assigned)
-  expect(response.container).to be_truthy
+Then("first available container is located") do
+  available_container = AvailableContainer.new
+  available_container_handler = AvailableContainerHandler.new
+  response = available_container_handler.handle(available_container)
+  @container = response.container
+end
+
+Then("he puts the package into it") do
+  store_package = StorePackage.new(@container)
+  store_package_handler = StorePackageHandler.new
+  store_package_handler.handle(store_package)
+
+  expect(@container.contains?(@locator)).to be_truthy
 end

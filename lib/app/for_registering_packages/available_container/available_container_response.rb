@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require_relative "../../domain/container"
+
 class AvailableContainerResponse
   def container
-    true
+    Container.new
   end
 end
