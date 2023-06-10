@@ -6,11 +6,13 @@ require_relative "../../lib/app/for_registering_packages/available_container/ava
 require_relative "../../lib/app/for_registering_packages/available_container/available_container_handler"
 require_relative "../../lib/app/for_registering_packages/store_package/store_package"
 require_relative "../../lib/app/for_registering_packages/store_package/store_package_handler"
+require_relative "../../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue"
 
 Given("Merry registers a package") do
+  @memory_package_queue = InMemoryPackageQueue.new
   @locator = "some-locator"
   register_package = RegisterPackage.new @locator
-  register_package_handler = RegisterPackageHandler.new
+  register_package_handler = RegisterPackageHandler.new @memory_package_queue
   register_package_handler.handle(register_package)
 end
 

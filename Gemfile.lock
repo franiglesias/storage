@@ -28,6 +28,7 @@ GEM
     cucumber-messages (18.0.0)
     cucumber-tag-expressions (4.1.0)
     diff-lcs (1.5.0)
+    docile (1.4.0)
     ffi (1.15.5)
     json (2.6.3)
     language_server-protocol (3.17.0.3)
@@ -71,6 +72,12 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.13.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     standard (1.29.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
@@ -92,6 +99,7 @@ PLATFORMS
 DEPENDENCIES
   cucumber
   rspec
+  simplecov
   standard
 
 RUBY VERSION
