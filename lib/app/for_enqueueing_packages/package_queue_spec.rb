@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rspec"
-require_relative "../../../lib/app/domain/package"
+require_relative "../domain/package"
 
 shared_examples "a PackageQueue" do
   it { is_expected.to respond_to(:put).with(1).argument }

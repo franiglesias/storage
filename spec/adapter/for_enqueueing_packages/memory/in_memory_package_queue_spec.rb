@@ -2,7 +2,7 @@
 
 require "rspec"
 
-require_relative "../../../app/for_enqueueing_packages/package_queue_spec"
+require_relative "../../../../lib/app/for_enqueueing_packages/package_queue_spec"
 
 require_relative "../../../../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue"
 
