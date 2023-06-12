@@ -3,7 +3,9 @@
 require_relative "../../domain/container"
 
 class AvailableContainerResponse
-  def container
-    Container.new
+  attr_reader :container
+
+  def initialize(container)
+    @container = container
   end
 end
