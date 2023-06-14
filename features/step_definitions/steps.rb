@@ -18,16 +18,16 @@ Given("Merry registers a package") do
 end
 
 Then("first available container is located") do
-  containers = InMemoryContainers.new
+  @containers = InMemoryContainers.new
   available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(containers)
+  available_container_handler = AvailableContainerHandler.new(@containers)
   response = available_container_handler.handle(available_container)
   @container = response.container
 end
 
 Then("he puts the package into it") do
   store_package = StorePackage.new(@container)
-  store_package_handler = StorePackageHandler.new
+  store_package_handler = StorePackageHandler.new(@memory_package_queue, @containers)
   store_package_handler.handle(store_package)
 
   expect(@container.contains?(@locator)).to be_truthy
