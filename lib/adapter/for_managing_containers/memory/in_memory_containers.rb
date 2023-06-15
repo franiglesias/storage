@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class InMemoryContainers
+  def initialize
+    @container = Container.new
+  end
+
   def available
-    Container.new
+    @container
+  end
+
+  def update(container)
+    @container = container
   end
 end

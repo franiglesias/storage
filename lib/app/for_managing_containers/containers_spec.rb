@@ -2,6 +2,7 @@
 
 require "rspec"
 require_relative "../domain/container"
+require_relative "../domain/package"
 
 shared_examples "a Containers" do
   it { is_expected.to respond_to(:available) }
@@ -15,6 +16,16 @@ shared_examples "a Containers" do
       container = @containers.available
 
       expect(container).to be_a(Container)
+    end
+  end
+
+  describe ".update" do
+    it "updates container info" do
+      container = Container.new
+      container.store(Package.new("locator"))
+      @containers.update(container)
+      recovered = @containers.available
+      expect(recovered.contains?("locator")).to be_truthy
     end
   end
 end
