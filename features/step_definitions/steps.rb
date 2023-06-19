@@ -15,7 +15,7 @@ require_relative "../../lib/app/domain/container"
 Given("Merry registers a package") do
   @memory_package_queue = InMemoryPackageQueue.new
   @locator = "some-locator"
-  register_package = RegisterPackage.new @locator
+  register_package = RegisterPackage.new @locator, "small"
   register_package_handler = RegisterPackageHandler.new @memory_package_queue
   register_package_handler.handle(register_package)
 end

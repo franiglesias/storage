@@ -15,6 +15,13 @@ RSpec.describe "Container" do
     # Do nothing
   end
 
+  context "Container instantiation" do
+    it "should prepare container of desired capacity" do
+      small = Container.of_capacity("small")
+      expect(small.capacity).to eq(Capacity.new(4))
+    end
+  end
+
   context "Space available" do
     it "should be available if empty" do
       expect(Container.new.available?).to be_truthy
