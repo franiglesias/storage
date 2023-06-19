@@ -6,7 +6,8 @@ class InMemoryContainers
   end
 
   def available
-    @container
+    return @container if @container.available?
+    nil
   end
 
   def update(container)

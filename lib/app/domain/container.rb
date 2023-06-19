@@ -9,7 +9,13 @@ class Container
     true
   end
 
+  def available?
+    true
+  end
+
   def store(package)
     @packages.append(package)
   end
 end
+
+require_relative "full_container"

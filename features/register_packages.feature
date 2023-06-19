@@ -10,3 +10,8 @@ Feature: Registering packages
     When Merry registers a package
     Then first available container is located
     And he puts the package into it
+
+  Scenario: There is no enough space for allocating package
+    Given no container with enough space
+    When Merry registers a package
+    Then package stays in queue

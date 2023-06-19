@@ -12,10 +12,17 @@ shared_examples "a Containers" do
   end
 
   describe ".available" do
-    it "returns a container with enough space" do
+    it "should return a container with enough space" do
       container = @containers.available
 
       expect(container).to be_a(Container)
+    end
+
+    it "should return nil if no container with available space" do
+      @containers.update(FullContainer.new)
+      container = @containers.available
+
+      expect(container).to be_nil
     end
   end
 
