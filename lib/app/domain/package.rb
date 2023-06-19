@@ -19,8 +19,4 @@ class Package
   end
 end
 
-class SmallPackage < Package
-  def size
-    PackageSize.new("small")
-  end
-end
+require_relative "small_package"
