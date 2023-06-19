@@ -36,7 +36,7 @@ RSpec.describe "Container" do
     it "fails when is full" do
       container = FullContainer.new
 
-      package = Package.register("new")
+      package = Package.register("new", "small")
       expect { container.store(package) }.to raise_error(NoSpaceInContainer)
     end
   end

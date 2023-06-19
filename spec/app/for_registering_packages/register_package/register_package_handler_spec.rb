@@ -20,7 +20,7 @@ RSpec.describe "RegisterPackageHandler" do
         expect(package.allocated?).to be_falsey
       end
 
-      command = RegisterPackage.new("some-locator")
+      command = RegisterPackage.new("some-locator", "small")
       handler = RegisterPackageHandler.new(package_queue)
       handler.handle(command)
     end

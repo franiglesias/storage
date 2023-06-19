@@ -13,7 +13,7 @@ shared_examples "a PackageQueue" do
 
   describe ".put" do
     it "accepts packages" do
-      a_package = Package.register("locator")
+      a_package = Package.register("locator", "small")
       @queue.put(a_package)
 
       expect(@queue).to include(a_package)
@@ -22,7 +22,7 @@ shared_examples "a PackageQueue" do
 
   describe ".get" do
     before do
-      @a_package = Package.register("locator")
+      @a_package = Package.register("locator", "small")
       @queue.put(@a_package)
     end
     it "gives first package" do

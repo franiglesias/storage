@@ -6,11 +6,21 @@ class Package
     @locator = locator
   end
 
-  def self.register(locator)
-    Package.new(locator)
+  def self.register(locator, size)
+    return SmallPackage.new(locator) if size == "small"
   end
 
   def allocated?
     false
+  end
+
+  def size
+    PackageSize.new("small")
+  end
+end
+
+class SmallPackage < Package
+  def size
+    PackageSize.new("small")
   end
 end
