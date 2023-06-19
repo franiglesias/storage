@@ -54,3 +54,27 @@ Then("package stays in queue") do
   recovered = @memory_package_queue.get
   expect(recovered.locator).to eq(@locator)
 end
+
+# Having a container with capacity
+#
+Given("an empty {string} container") do |capacity|
+  @containers = InMemoryContainers.new
+  @small_container = Container.of_capacity(capacity)
+  @containers.update(@small_container)
+end
+
+When("Merry registers a {string} size package") do |size|
+  @memory_package_queue = InMemoryPackageQueue.new
+  @locator = "some-locator"
+  register_package = RegisterPackage.new(@locator, size)
+  register_package_handler = RegisterPackageHandler.new @memory_package_queue
+  register_package_handler.handle(register_package)
+end
+
+Then("package is allocated in container") do
+  available_container = AvailableContainer.new
+  available_container_handler = AvailableContainerHandler.new(@containers)
+  response = available_container_handler.handle(available_container)
+  @container = response.container
+  expect(@container).to be(@small_container)
+end
