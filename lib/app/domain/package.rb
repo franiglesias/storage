@@ -16,7 +16,7 @@ class Package
   end
 
   def size
-    PackageSize.new("small")
+    PackageSize.new(1)
   end
 end
 

@@ -5,8 +5,8 @@ class InMemoryContainers
     @container = Container.new
   end
 
-  def available
-    return @container if @container.available?
+  def available(package)
+    return @container if @container.available?(package)
     nil
   end
 

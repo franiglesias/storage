@@ -3,7 +3,7 @@ class FullContainer < Container
     raise NoSpaceInContainer.new
   end
 
-  def available?
+  def available?(package = nil)
     false
   end
 end

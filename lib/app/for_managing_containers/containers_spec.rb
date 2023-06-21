@@ -13,14 +13,14 @@ shared_examples "a Containers" do
 
   describe ".available" do
     it "should return a container with enough space" do
-      container = @containers.available
+      container = @containers.available(Package.new("locator"))
 
       expect(container).to be_a(Container)
     end
 
     it "should return nil if no container with available space" do
       @containers.update(FullContainer.new)
-      container = @containers.available
+      container = @containers.available(Package.new("locator"))
 
       expect(container).to be_nil
     end
@@ -31,7 +31,7 @@ shared_examples "a Containers" do
       container = Container.new
       container.store(SmallPackage.new("locator"))
       @containers.update(container)
-      recovered = @containers.available
+      recovered = @containers.available(Package.new("locator"))
       expect(recovered.contains?("locator")).to be_truthy
     end
   end

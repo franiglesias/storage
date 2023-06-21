@@ -23,7 +23,7 @@ end
 Then("first available container is located") do
   @containers = InMemoryContainers.new
   available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers)
+  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
   response = available_container_handler.handle(available_container)
   @container = response.container
 end
@@ -46,7 +46,7 @@ end
 
 Then("there is no available container") do
   available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers)
+  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
   response = available_container_handler.handle(available_container)
   @container = response.container
   expect(@container).to be_nil
@@ -75,7 +75,7 @@ end
 
 Then("package is allocated in container") do
   available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers)
+  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
   response = available_container_handler.handle(available_container)
   @container = response.container
   expect(@container).to be(@small_container)
