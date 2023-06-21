@@ -20,10 +20,18 @@ Feature: Registering packages
   Scenario: There is no enough space for allocating package
     Given no container with enough space
     When Merry registers a package
-    Then package stays in queue
+    Then there is no available container
+    And package stays in queue
 
   Scenario: Having a container with capacity
     Given an empty "small" container
-    When Merry registers a "medium" size package
+    When Merry registers a "small" size package
     Then package is allocated in container
     And he puts the package into it
+
+  Scenario: Container with packages in it and not enough free space
+    Given an empty "small" container
+    And a "large" package stored
+    When Merry registers a "large" size package
+    Then there is no available container
+    And package stays in queue

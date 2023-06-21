@@ -8,6 +8,7 @@ class Package
 
   def self.register(locator, size)
     return SmallPackage.new(locator) if size == "small"
+    return LargePackage.new(locator) if size == "large"
   end
 
   def allocated?
@@ -20,3 +21,4 @@ class Package
 end
 
 require_relative "small_package"
+require_relative "large_package"

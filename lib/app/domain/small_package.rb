@@ -1,5 +1,5 @@
 class SmallPackage < Package
   def size
-    PackageSize.new("small")
+    PackageSize.new(1)
   end
 end

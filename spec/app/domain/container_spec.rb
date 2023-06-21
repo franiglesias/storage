@@ -30,6 +30,22 @@ RSpec.describe "Container" do
     it "should be not available if full" do
       expect(FullContainer.new.available?).to be_falsey
     end
+
+    it "should be partially available with only one package" do
+      container = Container.of_capacity("small")
+      container.store(LargePackage.new("locator-large"))
+
+      package = SmallPackage.new("locator-small")
+      expect(container.available?(package)).to be_truthy
+    end
+
+    it "should not be available for second large package" do
+      container = Container.of_capacity("small")
+      container.store(LargePackage.new("locator-large"))
+
+      package = LargePackage.new("other_large")
+      expect(container.available?(package)).to be_falsey
+    end
   end
 
   context "Storing packages" do

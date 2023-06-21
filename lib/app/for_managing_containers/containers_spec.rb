@@ -29,7 +29,7 @@ shared_examples "a Containers" do
   describe ".update" do
     it "updates container info" do
       container = Container.new
-      container.store(Package.new("locator"))
+      container.store(SmallPackage.new("locator"))
       @containers.update(container)
       recovered = @containers.available
       expect(recovered.contains?("locator")).to be_truthy

@@ -17,12 +17,24 @@ class Container
     Capacity.new(4)
   end
 
-  def available?
-    true
+  def available?(package = nil)
+    remaining = capacity.subtract(allocated)
+    return remaining.not_full? if package.nil?
+    remaining.enough_for?(package)
   end
 
   def store(package)
     @packages.append(package)
+  end
+
+  private
+
+  def allocated
+    alloc = Capacity.new(0)
+    @packages.each do |package|
+      alloc = alloc.add_size(package)
+    end
+    alloc
   end
 end
 

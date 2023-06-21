@@ -42,7 +42,9 @@ Given("no container with enough space") do
   @containers = InMemoryContainers.new
   full_container = FullContainer.new
   @containers.update(full_container)
+end
 
+Then("there is no available container") do
   available_container = AvailableContainer.new
   available_container_handler = AvailableContainerHandler.new(@containers)
   response = available_container_handler.handle(available_container)
@@ -77,4 +79,12 @@ Then("package is allocated in container") do
   response = available_container_handler.handle(available_container)
   @container = response.container
   expect(@container).to be(@small_container)
+end
+
+# Container with packages in it and not enough free space
+
+Given("a {string} package stored") do |size|
+  package = Package.register("large-pkg", size)
+  @small_container.store(package)
+  @containers.update(@small_container)
 end
