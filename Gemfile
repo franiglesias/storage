@@ -8,3 +8,5 @@ group :test do
   gem "simplecov"
 end
 gem "standard", group: "development", require: false
+
+gem "thor", "~> 1.2"

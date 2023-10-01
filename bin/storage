@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/adapter/for_registering_packages/cli/thor/thor_cli_adapter'
+
+storage = ThorCliAdapter.new
+
+storage.run(ARGV)

@@ -91,6 +91,7 @@ GEM
       rubocop-performance (~> 1.18.0)
     sys-uname (1.2.3)
       ffi (~> 1.1)
+    thor (1.2.2)
     unicode-display_width (2.4.2)
 
 PLATFORMS
@@ -101,6 +102,7 @@ DEPENDENCIES
   rspec
   simplecov
   standard
+  thor (~> 1.2)
 
 RUBY VERSION
    ruby 3.1.0p0
