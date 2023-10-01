@@ -6,7 +6,13 @@ class Container
   end
 
   def self.of_capacity(capacity)
-    return SmallContainer.new if capacity == "small"
+    capacity_map = {
+      small: SmallContainer.new,
+      medium: MediumContainer.new,
+      large: LargeContainer.new
+    }
+
+    capacity_map[capacity.to_sym]
   end
 
   def contains?(locator)
@@ -40,3 +46,5 @@ end
 
 require_relative "full_container"
 require_relative "small_container"
+require_relative "medium_container"
+require_relative "large_container"

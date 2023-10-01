@@ -16,9 +16,16 @@ RSpec.describe "Container" do
   end
 
   context "Container instantiation" do
-    it "should prepare container of desired capacity" do
-      small = Container.of_capacity("small")
-      expect(small.capacity).to eq(Capacity.new(4))
+    capacity_map = {
+      small: 4,
+      medium: 6,
+      large: 8
+    }
+    capacity_map.each do |size, capacity|
+      it "should create containers of the desired size" do
+        c = Container.of_capacity(size)
+        expect(c.capacity).to eq(Capacity.new(capacity))
+      end
     end
   end
 
