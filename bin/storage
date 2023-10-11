@@ -3,6 +3,9 @@
 
 require_relative '../lib/adapter/for_registering_packages/cli/cli_adapter'
 
-storage = CliAdapter.new
+command_bus = CommandBus.new
+query_bus = QueryBus.new
+factory = ActionFactory.new(command_bus, query_bus)
+storage = CliAdapter.new(factory)
 
 storage.run(ARGV)
