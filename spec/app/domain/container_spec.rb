@@ -29,29 +29,40 @@ RSpec.describe "Container" do
     end
   end
 
+  context "Package management" do
+    container = Container.of_capacity("small")
+    stored = Package.register("stored", "large")
+    container.store(stored)
+
+    it "should not contain a package not stored" do
+      expect(container.contains?("not-stored")).to be_falsey
+    end
+
+    it "should contain an stored package" do
+      expect(container.contains?("stored")).to be_truthy
+    end
+  end
+
   context "Space available" do
+    container = Container.of_capacity("small")
+    container.store(LargePackage.new("locator-large"))
+
     it "should be available if empty" do
-      expect(Container.new.available?).to be_truthy
+      expect(Container.new.has_space_for?).to be_truthy
     end
 
     it "should be not available if full" do
-      expect(FullContainer.new.available?).to be_falsey
+      expect(FullContainer.new.has_space_for?).to be_falsey
     end
 
     it "should be partially available with only one package" do
-      container = Container.of_capacity("small")
-      container.store(LargePackage.new("locator-large"))
-
-      package = SmallPackage.new("locator-small")
-      expect(container.available?(package)).to be_truthy
+      small_package = SmallPackage.new("locator-small")
+      expect(container.has_space_for?(small_package)).to be_truthy
     end
 
     it "should not be available for second large package" do
-      container = Container.of_capacity("small")
-      container.store(LargePackage.new("locator-large"))
-
-      package = LargePackage.new("other_large")
-      expect(container.available?(package)).to be_falsey
+      large_package = LargePackage.new("other-large")
+      expect(container.has_space_for?(large_package)).to be_falsey
     end
   end
 

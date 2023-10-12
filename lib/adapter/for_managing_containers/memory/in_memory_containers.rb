@@ -6,7 +6,7 @@ class InMemoryContainers
   end
 
   def available(package)
-    return @container if @container.available?(package)
+    return @container if @container.has_space_for?(package)
     nil
   end
 

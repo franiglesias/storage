@@ -2,7 +2,7 @@
 
 class Container
   def initialize
-    @packages = []
+    @packages = {}
   end
 
   def self.of_capacity(capacity)
@@ -16,31 +16,31 @@ class Container
   end
 
   def contains?(locator)
-    true
+    !@packages[locator].nil?
   end
 
   def capacity
     Capacity.new(4)
   end
 
-  def available?(package = nil)
+  def has_space_for?(package = nil)
     remaining = capacity.subtract(allocated)
     return remaining.not_full? if package.nil?
     remaining.enough_for?(package)
   end
 
   def store(package)
-    @packages.append(package)
+    @packages[package.locator] = package
   end
 
   private
 
   def allocated
-    alloc = Capacity.new(0)
-    @packages.each do |package|
-      alloc = alloc.add_size(package)
+    allocated = Capacity.new(0)
+    @packages.each do |_, package|
+      allocated = allocated.add_size(package)
     end
-    alloc
+    allocated
   end
 end
 
