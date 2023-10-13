@@ -21,7 +21,11 @@ Given("Merry registers a package") do
 end
 
 Then("first available container is located") do
-  @containers = InMemoryContainers.new
+  @containers = InMemoryContainers.configure({
+    small: 1,
+    medium: 1,
+    large: 1
+  })
   available_container = AvailableContainer.new
   available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
   response = available_container_handler.handle(available_container)
@@ -40,8 +44,6 @@ end
 
 Given("no container with enough space") do
   @containers = InMemoryContainers.new
-  full_container = FullContainer.new
-  @containers.update(full_container)
 end
 
 Then("there is no available container") do
@@ -62,7 +64,7 @@ end
 Given("an empty {string} container") do |capacity|
   @containers = InMemoryContainers.new
   @small_container = Container.of_capacity(capacity)
-  @containers.update(@small_container)
+  @containers.add(@small_container)
 end
 
 When("Merry registers a {string} size package") do |size|

@@ -12,27 +12,24 @@ shared_examples "a Containers" do
   end
 
   describe ".available" do
-    it "should return a container with enough space" do
-      container = @containers.available(Package.new("locator"))
-
-      expect(container).to be_a(Container)
+    it "should return no containers if none configured" do
+      expect(@containers.available).to eq([])
     end
 
-    it "should return nil if no container with available space" do
-      @containers.update(FullContainer.new)
-      container = @containers.available(Package.new("locator"))
-
-      expect(container).to be_nil
+    it "should return empty if no container with available space" do
+      @containers.add(FullContainer.new)
+      expect(@containers.available).to eq([])
     end
-  end
 
-  describe ".update" do
-    it "updates container info" do
-      container = Container.new
-      container.store(SmallPackage.new("locator"))
-      @containers.update(container)
-      recovered = @containers.available(Package.new("locator"))
-      expect(recovered.contains?("locator")).to be_truthy
+    it "should return only containers that have available space" do
+      small_container = SmallContainer.new
+      medium_container = MediumContainer.new
+
+      @containers.add(small_container)
+      @containers.add(medium_container)
+      expect(@containers.available).to eq([
+        small_container, medium_container
+      ])
     end
   end
 end

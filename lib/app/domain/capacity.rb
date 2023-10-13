@@ -2,12 +2,17 @@
 
 class Capacity
   attr_reader :capacity
+
   def initialize(capacity)
     @capacity = capacity
   end
 
   def ==(other)
     @capacity == other.capacity
+  end
+
+  def >(other)
+    @capacity > other.capacity
   end
 
   def subtract(other)
@@ -21,6 +26,11 @@ class Capacity
 
   def not_full?
     @capacity > 0
+  end
+
+  def add(other)
+    size = capacity + other.capacity
+    Capacity.new(size)
   end
 
   def add_size(package)
