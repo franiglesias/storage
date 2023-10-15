@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rspec"
-require_relative "../domain/package"
+require_relative "../domain/package/package"
 require_relative "no_more_packages"
 
 shared_examples "a PackageQueue" do

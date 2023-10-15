@@ -2,7 +2,7 @@
 
 require "rspec"
 require_relative "../domain/container"
-require_relative "../domain/package"
+require_relative "../domain/package/package"
 require_relative "../domain/available_containers"
 
 shared_examples "a Containers" do

@@ -4,7 +4,7 @@ require "rspec"
 require_relative "../../../../lib/app/for_registering_packages/store_package/store_package_handler"
 require_relative "../../../../lib/app/for_registering_packages/store_package/store_package"
 require_relative "../../../../lib/app/domain/container"
-require_relative "../../../../lib/app/domain/package"
+require_relative "../../../../lib/app/domain/package/package"
 
 RSpec.describe StorePackageHandler do
   before do

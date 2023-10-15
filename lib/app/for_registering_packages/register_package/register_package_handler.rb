@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../../app/domain/package"
+require_relative "../../../app/domain/package/package"
 
 class RegisterPackageHandler
   def initialize(package_queue)
