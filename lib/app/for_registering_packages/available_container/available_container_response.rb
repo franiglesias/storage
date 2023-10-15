@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../domain/container"
+require_relative "../../domain/container/container"
 
 class AvailableContainerResponse
   attr_reader :container

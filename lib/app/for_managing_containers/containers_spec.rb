@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rspec"
-require_relative "../domain/container"
+require_relative "../domain/container/container"
 require_relative "../domain/package/package"
 require_relative "../domain/available_containers"
 

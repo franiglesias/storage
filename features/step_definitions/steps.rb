@@ -8,7 +8,7 @@ require_relative "../../lib/app/for_registering_packages/store_package/store_pac
 require_relative "../../lib/app/for_registering_packages/store_package/store_package_handler"
 require_relative "../../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue"
 require_relative "../../lib/adapter/for_managing_containers/memory/in_memory_containers"
-require_relative "../../lib/app/domain/container"
+require_relative "../../lib/app/domain/container/container"
 
 # There is space for allocating package
 

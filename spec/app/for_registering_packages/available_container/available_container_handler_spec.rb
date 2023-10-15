@@ -2,7 +2,7 @@
 
 require "rspec"
 
-require_relative "../../../../lib/app/domain/container"
+require_relative "../../../../lib/app/domain/container/container"
 require_relative "../../../../lib/app/domain/package/large_package"
 require_relative "../../../../lib/app/for_registering_packages/available_container/available_container"
 require_relative "../../../../lib/app/for_registering_packages/available_container/available_container_handler"

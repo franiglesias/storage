@@ -2,9 +2,9 @@
 
 require "rspec"
 
-require_relative "../../../lib/app/domain/container"
+require_relative "../../../lib/app/domain/container/container"
 require_relative "../../../lib/app/domain/package/package"
-require_relative "../../../lib/app/domain/no_space_in_container"
+require_relative "../../../lib/app/domain/container/no_space_in_container"
 
 RSpec.describe "Container" do
   before do
