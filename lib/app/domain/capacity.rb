@@ -1,31 +1,22 @@
 # frozen_string_literal: true
 
+Capacity = Struct.new(:capacity)
 class Capacity
-  attr_reader :capacity
-
-  def initialize(capacity)
-    @capacity = capacity
-  end
-
-  def ==(other)
-    @capacity == other.capacity
-  end
-
   def >(other)
-    @capacity > other.capacity
+    capacity > other.capacity
   end
 
   def subtract(other)
-    remaining = @capacity - other.capacity
+    remaining = capacity - other.capacity
     Capacity.new(remaining)
   end
 
   def enough_for?(package)
-    @capacity >= package.size.size
+    capacity >= package.size.size
   end
 
   def not_full?
-    @capacity > 0
+    capacity > 0
   end
 
   def add(other)
@@ -34,6 +25,6 @@ class Capacity
   end
 
   def add_size(package)
-    Capacity.new(@capacity + package.size.size)
+    Capacity.new(capacity + package.size.size)
   end
 end
