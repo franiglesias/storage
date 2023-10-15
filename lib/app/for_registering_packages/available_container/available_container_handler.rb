@@ -10,8 +10,9 @@ class AvailableContainerHandler
 
   def handle(available_container)
     package = @queue.get
-    available = @containers.available package
+    all_available = @containers.available
+    best_choice = all_available.best_choice_for(package)
     @queue.put package
-    AvailableContainerResponse.new(available)
+    AvailableContainerResponse.new(best_choice)
   end
 end

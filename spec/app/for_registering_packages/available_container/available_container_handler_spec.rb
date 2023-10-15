@@ -3,24 +3,29 @@
 require "rspec"
 
 require_relative "../../../../lib/app/domain/container"
+require_relative "../../../../lib/app/domain/large_package"
 require_relative "../../../../lib/app/for_registering_packages/available_container/available_container"
 require_relative "../../../../lib/app/for_registering_packages/available_container/available_container_handler"
+require_relative "../../../../lib/app/domain/available_containers"
+require_relative "../../../../lib/adapter/for_managing_containers/memory/in_memory_containers"
 
 RSpec.describe "AvailableContainerHandler" do
   context "when used for first time" do
     it "should provide available container" do
-      containers = double("Containers")
+      package = LargePackage.new("locator")
+
       package_queue = double("PackageQueue")
-      expected = Container.new
-      allow(containers).to receive(:available).and_return(expected)
-      allow(package_queue).to receive(:get).and_return(LargePackage.new("locator"))
+      allow(package_queue).to receive(:get).and_return(package)
       allow(package_queue).to receive(:put)
-      query = AvailableContainer
+
+      containers = InMemoryContainers.configure({
+        small: 1
+      })
+      query = AvailableContainer.new
       handler = AvailableContainerHandler.new(containers, package_queue)
       response = handler.handle(query)
-      container = response.container
 
-      expect(container).to eq(expected)
+      expect(response.container).not_to be_nil
     end
   end
 end

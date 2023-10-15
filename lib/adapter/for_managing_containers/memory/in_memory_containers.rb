@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../../../app/domain/available_containers"
+
 class InMemoryContainers
   def initialize
     @containers = []
@@ -24,7 +26,7 @@ class InMemoryContainers
     @containers.each do |container|
       tmp.append(container) if container.has_space_for?
     end
-    tmp
+    AvailableContainers.new(tmp)
   end
 
   def update(container)

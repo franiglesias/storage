@@ -9,8 +9,10 @@ When(/^Pippin adds a new container$/) do
 end
 
 Then(/^(\d+) containers? (is|are) available$/) do |number, _|
-  available = @containers.available.size
-  expect(available).to eq(number)
+  available = @containers.available
+
+  as_list = available.list
+  expect(as_list.size).to eq(number)
 end
 
 When(/^Pippin configures these containers$/) do |table|
