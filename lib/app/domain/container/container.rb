@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class Container
-  def initialize
+  def initialize(name)
+    @name = name
     @packages = {}
   end
 
-  def self.of_capacity(capacity)
+  def self.of_capacity(capacity, name)
     capacity_map = {
-      small: SmallContainer.new,
-      medium: MediumContainer.new,
-      large: LargeContainer.new
+      small: SmallContainer.new(name),
+      medium: MediumContainer.new(name),
+      large: LargeContainer.new(name)
     }
 
     capacity_map[capacity.to_sym]
@@ -41,6 +42,10 @@ class Container
       allocated = allocated.add_size(package)
     end
     allocated
+  end
+
+  public def to_s
+    @name
   end
 end
 

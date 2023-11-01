@@ -2,9 +2,16 @@
 # frozen_string_literal: true
 
 require_relative '../lib/adapter/for_registering_packages/cli/cli_adapter'
+require_relative '../lib/app/bus/command_bus'
+require_relative '../lib/app/bus/query_bus'
+require_relative '../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue'
+require_relative '../lib/adapter/for_managing_containers/memory/in_memory_containers'
 
-command_bus = CommandBus.new
-query_bus = QueryBus.new
+queue = InMemoryPackageQueue.new
+containers = InMemoryContainers.new
+
+command_bus = CommandBus.new(queue, containers)
+query_bus = QueryBus.new(queue, containers)
 factory = ActionFactory.new(command_bus, query_bus)
 storage = CliAdapter.new(factory)
 

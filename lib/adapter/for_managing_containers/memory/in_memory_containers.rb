@@ -14,8 +14,9 @@ class InMemoryContainers
   def self.configure(conf)
     containers = InMemoryContainers.new
     conf.each do |size, qty|
-      qty.times do
-        containers.add(Container.of_capacity(size.to_sym))
+      qty.times do |index|
+        name = "#{size[0]}-#{index + 1}"
+        containers.add(Container.of_capacity(size.to_sym, name))
       end
     end
     containers

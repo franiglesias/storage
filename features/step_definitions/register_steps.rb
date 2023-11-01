@@ -9,41 +9,46 @@ require_relative "../../lib/app/for_registering_packages/store_package/store_pac
 require_relative "../../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue"
 require_relative "../../lib/adapter/for_managing_containers/memory/in_memory_containers"
 require_relative "../../lib/app/domain/container/container"
-
+require_relative "../../lib/app/bus/command_bus"
+require_relative "../../lib/app/bus/query_bus"
+require_relative "../../lib/adapter/for_registering_packages/cli/action_factory"
+require_relative "../../lib/adapter/for_registering_packages/cli/cli_adapter"
 # There is space for allocating package
 
-Given("Merry registers a package") do
-  @memory_package_queue = InMemoryPackageQueue.new
-  @locator = "some-locator"
-  register_package = RegisterPackage.new @locator, "small"
-  register_package_handler = RegisterPackageHandler.new @memory_package_queue
-  register_package_handler.handle(register_package)
+queue = InMemoryPackageQueue.new
+
+container_configuration = {
+  small: 1,
+  medium: 1,
+  large: 1
+}
+containers = InMemoryContainers.configure(container_configuration)
+
+command_bus = CommandBus.new(queue, containers)
+query_bus = QueryBus.new(queue, containers)
+
+factory = ActionFactory.new(command_bus, query_bus)
+
+storage = CliAdapter.new(factory)
+
+When("Merry registers a package") do
+  output = capture_stdout { storage.run(%w[register some-locator small]) }
+  @container_name = output.split.last
 end
 
 Then("first available container is located") do
-  @containers = InMemoryContainers.configure({
-    small: 1,
-    medium: 1,
-    large: 1
-  })
-  available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
-  response = available_container_handler.handle(available_container)
-  @container = response.container
+  expect(@container_name).to eq("s-1")
 end
 
 Then("he puts the package into it") do
-  store_package = StorePackage.new(@container)
-  store_package_handler = StorePackageHandler.new(@memory_package_queue, @containers)
-  store_package_handler.handle(store_package)
-
-  expect(@container.contains?(@locator)).to be_truthy
+  output = capture_stdout { storage.run(%w[store @name]) }
+  expect(output).to eq("Package stored in container #{@container_name}")
 end
 
 # There is no enough space for allocating package
 
 Given("no container with enough space") do
-  @containers = InMemoryContainers.new
+  containers = InMemoryContainers.new
 end
 
 Then("there is no available container") do
@@ -89,4 +94,14 @@ Given("a {string} package stored") do |size|
   package = Package.register("large-pkg", size)
   @small_container.store(package)
   @containers.update(@small_container)
+end
+
+def capture_stdout
+  original = $stdout
+  foo = StringIO.new
+  $stdout = foo
+  yield
+  $stdout.string
+ensure
+  $stdout = original
 end
