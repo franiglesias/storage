@@ -13,5 +13,8 @@ class CommandBus
     if command.instance_of?(RegisterPackage)
       RegisterPackageHandler.new(@queue).handle(command)
     end
+    if command.instance_of?(StorePackage)
+      StorePackageHandler.new(@queue, @containers).handle(command)
+    end
   end
 end

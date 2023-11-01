@@ -8,8 +8,6 @@ class StorePackageHandler
 
   def handle(store_package)
     package = @package_queue.get
-    container = store_package.container
-    container.store(package)
-    @containers.update(container)
+    @containers.store(store_package.container, package)
   end
 end

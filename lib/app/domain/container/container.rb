@@ -34,6 +34,10 @@ class Container
     @packages[package.locator] = package
   end
 
+  def is_named?(container_name)
+    container_name == @name
+  end
+
   private
 
   def allocated

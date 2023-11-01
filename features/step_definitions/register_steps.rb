@@ -15,85 +15,77 @@ require_relative "../../lib/adapter/for_registering_packages/cli/action_factory"
 require_relative "../../lib/adapter/for_registering_packages/cli/cli_adapter"
 # There is space for allocating package
 
-queue = InMemoryPackageQueue.new
-
 container_configuration = {
   small: 1,
   medium: 1,
   large: 1
 }
-containers = InMemoryContainers.configure(container_configuration)
 
-command_bus = CommandBus.new(queue, containers)
-query_bus = QueryBus.new(queue, containers)
+def configure_storage_with(conf)
+  queue = InMemoryPackageQueue.new
+  containers = InMemoryContainers.configure(conf)
 
-factory = ActionFactory.new(command_bus, query_bus)
+  command_bus = CommandBus.new(queue, containers)
+  query_bus = QueryBus.new(queue, containers)
 
-storage = CliAdapter.new(factory)
+  factory = ActionFactory.new(command_bus, query_bus)
+
+  CliAdapter.new(factory)
+end
+
+Given(/^there is enough capacity$/) do
+  @storage = configure_storage_with(container_configuration)
+end
 
 When("Merry registers a package") do
-  output = capture_stdout { storage.run(%w[register some-locator small]) }
-  @container_name = output.split.last
+  @output = capture_stdout { @storage.run(%w[register some-locator small]) }
 end
 
 Then("first available container is located") do
+  @container_name = @output.split.last
   expect(@container_name).to eq("s-1")
 end
 
 Then("he puts the package into it") do
-  output = capture_stdout { storage.run(%w[store @name]) }
-  expect(output).to eq("Package stored in container #{@container_name}")
+  output = capture_stdout { @storage.run(["store", @container_name]) }
+  expect(output).to eq("package stored in container #{@container_name}\n")
 end
 
 # There is no enough space for allocating package
 
 Given("no container with enough space") do
-  containers = InMemoryContainers.new
+  @storage = configure_storage_with({})
 end
 
 Then("there is no available container") do
-  available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
-  response = available_container_handler.handle(available_container)
-  @container = response.container
-  expect(@container).to be_nil
+  expect(@output).to include("no space available")
 end
 
 Then("package stays in queue") do
-  recovered = @memory_package_queue.get
-  expect(recovered.locator).to eq(@locator)
+  expect(@output).to include("Package some-locator is in waiting queue")
 end
 
 # Having a container with capacity
 #
 Given("an empty {string} container") do |capacity|
-  @containers = InMemoryContainers.new
-  @small_container = Container.of_capacity(capacity)
-  @containers.add(@small_container)
+  configuration = {}
+  configuration[capacity.to_sym] = 1
+  @storage = configure_storage_with(configuration)
 end
 
 When("Merry registers a {string} size package") do |size|
-  @memory_package_queue = InMemoryPackageQueue.new
-  @locator = "some-locator"
-  register_package = RegisterPackage.new(@locator, size)
-  register_package_handler = RegisterPackageHandler.new @memory_package_queue
-  register_package_handler.handle(register_package)
+  @output = capture_stdout { @storage.run(["register", "some-locator", size]) }
 end
 
 Then("package is allocated in container") do
-  available_container = AvailableContainer.new
-  available_container_handler = AvailableContainerHandler.new(@containers, @memory_package_queue)
-  response = available_container_handler.handle(available_container)
-  @container = response.container
-  expect(@container).to be(@small_container)
+  @container_name = @output.split.last
+  expect(@container_name).to eq("s-1")
 end
 
 # Container with packages in it and not enough free space
 
 Given("a {string} package stored") do |size|
-  package = Package.register("large-pkg", size)
-  @small_container.store(package)
-  @containers.update(@small_container)
+  @storage.run(["register", "large-pkg", size])
 end
 
 def capture_stdout

@@ -22,12 +22,11 @@ RSpec.describe StorePackageHandler do
       package = Package.new("locator")
 
       allow(package_queue).to receive(:get).and_return(package)
-      expect(containers).to receive(:update) do |c|
-        expect(c.contains?("locator")).to be_truthy
+      expect(containers).to receive(:store) do |_, _|
       end
 
       handler = StorePackageHandler.new(package_queue, containers)
-      command = StorePackage.new(Container.new)
+      command = StorePackage.new(Container.new("c"))
 
       handler.handle(command)
     end

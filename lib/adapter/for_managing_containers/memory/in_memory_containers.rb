@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../../app/domain/available_containers"
-
+require_relative "../../../app/domain/container/no_space_in_container"
 class InMemoryContainers
   def initialize
     @containers = []
@@ -20,6 +20,17 @@ class InMemoryContainers
       end
     end
     containers
+  end
+
+  def store(container_name, package)
+    @containers.each do |container|
+      if container.is_named?(container_name)
+        if container.has_space_for?(package)
+          return container.store(package)
+        end
+      end
+    end
+    raise NoSpaceInContainer.new
   end
 
   def available

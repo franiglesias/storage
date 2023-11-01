@@ -23,14 +23,14 @@ RSpec.describe "Container" do
     }
     capacity_map.each do |size, capacity|
       it "should create containers of the desired size" do
-        c = Container.of_capacity(size)
+        c = Container.of_capacity(size, "c1")
         expect(c.capacity).to eq(Capacity.new(capacity))
       end
     end
   end
 
   context "Package management" do
-    container = Container.of_capacity("small")
+    container = Container.of_capacity("small", "c")
     stored = Package.register("stored", "large")
     container.store(stored)
 
@@ -44,15 +44,15 @@ RSpec.describe "Container" do
   end
 
   context "Space available" do
-    container = Container.of_capacity("small")
+    container = Container.of_capacity("small", "c")
     container.store(LargePackage.new("locator-large"))
 
     it "should be available if empty" do
-      expect(Container.new.has_space_for?).to be_truthy
+      expect(Container.new("c").has_space_for?).to be_truthy
     end
 
     it "should be not available if full" do
-      expect(FullContainer.new.has_space_for?).to be_falsey
+      expect(FullContainer.new("c").has_space_for?).to be_falsey
     end
 
     it "should be partially available with only one package" do
@@ -68,7 +68,7 @@ RSpec.describe "Container" do
 
   context "Storing packages" do
     it "fails when is full" do
-      container = FullContainer.new
+      container = FullContainer.new("f")
 
       package = Package.register("new", "small")
       expect { container.store(package) }.to raise_error(NoSpaceInContainer)

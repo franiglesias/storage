@@ -22,13 +22,13 @@ shared_examples "a Containers" do
     end
 
     it "should return empty if no container with available space" do
-      @containers.add(FullContainer.new)
+      @containers.add(FullContainer.new("f"))
       expect(@containers.available).to eq(AvailableContainers.empty)
     end
 
     it "should return only containers that have available space" do
-      small_container = SmallContainer.new
-      medium_container = MediumContainer.new
+      small_container = SmallContainer.new("s")
+      medium_container = MediumContainer.new("m")
 
       @containers.add(small_container)
       @containers.add(medium_container)
