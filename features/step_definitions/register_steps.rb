@@ -85,7 +85,9 @@ end
 # Container with packages in it and not enough free space
 
 Given("a {string} package stored") do |size|
-  @storage.run(["register", "large-pkg", size])
+  output = capture_stdout { @storage.run(["register", "large-pkg", size]) }
+  container_name = output.split.last
+  @storage.run(["store", container_name])
 end
 
 def capture_stdout
