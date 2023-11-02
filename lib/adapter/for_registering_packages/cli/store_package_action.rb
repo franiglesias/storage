@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../../app/for_registering_packages/store_package/store_package"
+require_relative "../../../app/for_registering_packages/store_package/store_package_handler"
 require_relative "../../../app/domain/container/no_space_in_container"
 
 class StorePackageAction

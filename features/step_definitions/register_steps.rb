@@ -1,40 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/app/for_registering_packages/register_package/register_package"
-require_relative "../../lib/app/for_registering_packages/register_package/register_package_handler"
-require_relative "../../lib/app/for_registering_packages/available_container/available_container"
-require_relative "../../lib/app/for_registering_packages/available_container/available_container_handler"
-require_relative "../../lib/app/for_registering_packages/store_package/store_package"
-require_relative "../../lib/app/for_registering_packages/store_package/store_package_handler"
-require_relative "../../lib/adapter/for_enqueueing_packages/memory/in_memory_package_queue"
-require_relative "../../lib/adapter/for_managing_containers/memory/in_memory_containers"
-require_relative "../../lib/app/domain/container/container"
-require_relative "../../lib/app/bus/command_bus"
-require_relative "../../lib/app/bus/query_bus"
-require_relative "../../lib/adapter/for_registering_packages/cli/action_factory"
-require_relative "../../lib/adapter/for_registering_packages/cli/cli_adapter"
+require_relative "../../setup/cli_adapter_factory"
+
 # There is space for allocating package
 
-container_configuration = {
-  small: 1,
-  medium: 1,
-  large: 1
-}
-
-def configure_storage_with(conf)
-  queue = InMemoryPackageQueue.new
-  containers = InMemoryContainers.configure(conf)
-
-  command_bus = CommandBus.new(queue, containers)
-  query_bus = QueryBus.new(queue, containers)
-
-  factory = ActionFactory.new(command_bus, query_bus)
-
-  CliAdapter.new(factory)
-end
-
 Given(/^there is enough capacity$/) do
-  @storage = configure_storage_with(container_configuration)
+  enough_capacity_conf = {
+    small: 1,
+    medium: 1,
+    large: 1
+  }
+  @storage = CliAdapterFactory.for_test(enough_capacity_conf)
 end
 
 When("Merry registers a package") do
@@ -54,7 +30,8 @@ end
 # There is no enough space for allocating package
 
 Given("no container with enough space") do
-  @storage = configure_storage_with({})
+  no_container_conf = {}
+  @storage = CliAdapterFactory.for_test(no_container_conf)
 end
 
 Then("there is no available container") do
@@ -68,9 +45,9 @@ end
 # Having a container with capacity
 #
 Given("an empty {string} container") do |capacity|
-  configuration = {}
-  configuration[capacity.to_sym] = 1
-  @storage = configure_storage_with(configuration)
+  one_container_conf = {}
+  one_container_conf[capacity.to_sym] = 1
+  @storage = CliAdapterFactory.for_test(one_container_conf)
 end
 
 When("Merry registers a {string} size package") do |size|
