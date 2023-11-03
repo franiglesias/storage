@@ -2,8 +2,6 @@
 
 require_relative "../../setup/cli_adapter_factory"
 
-# There is space for allocating package
-
 Given(/^there is enough capacity$/) do
   enough_capacity_conf = {
     small: 1,
@@ -42,8 +40,6 @@ Then("package stays in queue") do
   expect(@output).to include("Package some-locator is in waiting queue")
 end
 
-# Having a container with capacity
-#
 Given("an empty {string} container") do |capacity|
   one_container_conf = {}
   one_container_conf[capacity.to_sym] = 1

@@ -2,6 +2,7 @@
 
 require_relative "../../adapter/for_enqueueing_packages/memory/in_memory_package_queue"
 require_relative "../../app/for_registering_packages/register_package/register_package_handler"
+require_relative "../../app/for_managing_containers/configure/configure_handler"
 
 class CommandBus
   def initialize(queue, containers)
@@ -15,6 +16,9 @@ class CommandBus
     end
     if command.instance_of?(StorePackage)
       StorePackageHandler.new(@queue, @containers).handle(command)
+    end
+    if command.instance_of?(Configure)
+      ConfigureHandler.new(@containers).handle(command)
     end
   end
 end

@@ -7,6 +7,10 @@ class InMemoryContainers
     @containers = []
   end
 
+  def configured?
+    @containers == []
+  end
+
   def add(container)
     @containers.append(container)
   end
