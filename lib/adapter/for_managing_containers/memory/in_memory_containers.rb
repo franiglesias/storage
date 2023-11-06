@@ -2,13 +2,36 @@
 
 require_relative "../../../app/domain/available_containers"
 require_relative "../../../app/domain/container/no_space_in_container"
+require_relative "../../../app/domain/container/container"
 class InMemoryContainers
   def initialize
     @containers = []
   end
 
   def configured?
-    @containers == []
+    @containers != []
+  end
+
+  def reconfigure(conf)
+    if configured?
+      return
+    end
+    @containers = []
+    conf.each do |size, qty|
+      qty.times do |index|
+        name = "#{size[0]}-#{index + 1}"
+        add(Container.of_capacity(size.to_sym, name))
+      end
+    end
+  end
+
+  def configuration
+    conf = Struct.new(:small, :medium, :large)
+    c = conf.new(0, 0, 0)
+    @containers.each do |container|
+      c = container.count(c)
+    end
+    c
   end
 
   def add(container)

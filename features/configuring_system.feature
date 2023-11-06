@@ -17,14 +17,28 @@ Feature: Configuring the system
       System is not configured
       """
 
-  Scenario: Empty system
+  Scenario: Adding one size of containers
     Given the system is not configured
     When Merry configures 2 "small" containers
     Then System shows status
       """
       Configured storage:
 
-      * Small: 2
+      * Small:  2
       * Medium: 0
-      * Large: 0
+      * Large:  0
+      """
+
+  Scenario: Adding all containers sizes
+    Given the system is not configured
+    When Merry configures 2 "small" containers
+    And Merry configures 4 "medium" containers
+    And Merry configures 3 "large" containers
+    Then System shows status
+      """
+      Configured storage:
+
+      * Small:  2
+      * Medium: 4
+      * Large:  3
       """

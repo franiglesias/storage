@@ -6,4 +6,9 @@ class SmallContainer < Container
   def capacity
     Capacity.new(4)
   end
+
+  def count(c)
+    c.small += 1
+    c
+  end
 end

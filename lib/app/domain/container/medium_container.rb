@@ -6,4 +6,9 @@ class MediumContainer < Container
   def capacity
     Capacity.new(6)
   end
+
+  def count(c)
+    c.medium += 1
+    c
+  end
 end

@@ -7,6 +7,9 @@ require_relative "../domain/available_containers"
 
 shared_examples "a Containers" do
   it { is_expected.to respond_to(:available) }
+  it { is_expected.to respond_to(:reconfigure) }
+  it { is_expected.to respond_to(:configured?) }
+  it { is_expected.to respond_to(:configuration) }
 
   before do
     @containers = described_class.new
@@ -35,6 +38,50 @@ shared_examples "a Containers" do
       expect(@containers.available.list).to eq([
         small_container, medium_container
       ])
+    end
+  end
+
+  describe ".configured?" do
+    it "should indicate that containers are not configured" do
+      expect(@containers.configured?).to be_falsey
+    end
+
+    it "should indicate that containers are configured" do
+      @containers = described_class.configure({small: 3})
+      expect(@containers.configured?).to be_truthy
+    end
+  end
+
+  describe ".reconfigure" do
+    it "should have capacity of containers configured" do
+      @containers.reconfigure({small: 1})
+      expect(@containers.total_space).to eq(Capacity.new(4))
+    end
+    it "should have capacity of containers combined" do
+      @containers.reconfigure({small: 2, medium: 2})
+      expect(@containers.total_space).to eq(Capacity.new(20))
+    end
+    it "should not change if already configured" do
+      @containers = described_class.configure({small: 2})
+      @containers.reconfigure({small: 4})
+      expect(@containers.total_space).to eq(Capacity.new(8))
+    end
+  end
+
+  describe ".configuration" do
+    it "should show 0 containers of each type if not configured" do
+      conf = @containers.configuration
+      expect(conf.small).to eq(0)
+      expect(conf.medium).to eq(0)
+      expect(conf.large).to eq(0)
+    end
+
+    it "should show current configuration" do
+      @containers.reconfigure({small: 2, medium: 4, large: 5})
+      conf = @containers.configuration
+      expect(conf.small).to eq(2)
+      expect(conf.medium).to eq(4)
+      expect(conf.large).to eq(5)
     end
   end
 end

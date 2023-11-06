@@ -6,6 +6,9 @@ class ConfigureHandler
   end
 
   def handle(configure)
-    raise ContainersNotYetConfigured.new
+    if (configure.conf == {}) && !@containers.configured?
+      raise ContainersNotYetConfigured.new
+    end
+    @containers.reconfigure(configure.conf)
   end
 end

@@ -2,6 +2,7 @@ require_relative "../../setup/cli_adapter_factory"
 
 Given(/^the system is not configured$/) do
   @storage = CliAdapterFactory.for_test({})
+  @arguments = ["configure"]
 end
 
 When(/^Merry sends no configuration$/) do
@@ -9,11 +10,12 @@ When(/^Merry sends no configuration$/) do
 end
 
 Then(/^System shows status$/) do |text|
-  expect(@output).to include(text)
+  @output = capture_stdout { @storage.run(@arguments) }
+  expect(@output.strip).to eq(text)
 end
 
 When(/^Merry configures (\d+) "([^"]*)" containers$/) do |qty, size|
-  pending
+  @arguments.append "--#{size}=#{qty}"
 end
 
 def capture_stdout
