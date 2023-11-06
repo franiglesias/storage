@@ -3,6 +3,7 @@
 require_relative "../../../app/domain/available_containers"
 require_relative "../../../app/domain/container/no_space_in_container"
 require_relative "../../../app/domain/container/container"
+require_relative "../../../app/for_managing_containers/configure/already_installed"
 class InMemoryContainers
   def initialize
     @containers = []
@@ -12,9 +13,9 @@ class InMemoryContainers
     @containers != []
   end
 
-  def reconfigure(conf)
+  def install(conf)
     if configured?
-      return
+      raise AlreadyInstalled.new
     end
     @containers = []
     conf.each do |size, qty|

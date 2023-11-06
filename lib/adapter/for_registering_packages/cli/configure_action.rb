@@ -15,6 +15,17 @@ class ConfigureAction
     @command_bus.execute(Configure.new(@conf))
   rescue ContainersNotYetConfigured
     puts "Configured storage:\n\nSystem is not configured"
+  rescue AlreadyInstalled
+    response = @query_bus.execute(GetConfiguration.new)
+    puts <<~EOT
+      Configured storage:
+
+      System is already configured
+      
+      * Small:  #{response.small}
+      * Medium: #{response.medium}
+      * Large:  #{response.large}
+    EOT
   else
     response = @query_bus.execute(GetConfiguration.new)
     puts <<~EOT

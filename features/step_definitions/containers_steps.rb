@@ -3,7 +3,7 @@ Given(/^There are no containers in collection$/) do
 end
 
 When(/^Pippin adds a new container$/) do
-  @added_container = Container.of_capacity("small")
+  @added_container = Container.of_capacity("small", "s")
   @expected = @added_container.capacity
   @containers.add(@added_container)
 end

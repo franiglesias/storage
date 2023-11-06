@@ -4,10 +4,11 @@ require "rspec"
 require_relative "../domain/container/container"
 require_relative "../domain/package/package"
 require_relative "../domain/available_containers"
+require_relative "configure/already_installed"
 
 shared_examples "a Containers" do
   it { is_expected.to respond_to(:available) }
-  it { is_expected.to respond_to(:reconfigure) }
+  it { is_expected.to respond_to(:install) }
   it { is_expected.to respond_to(:configured?) }
   it { is_expected.to respond_to(:configuration) }
 
@@ -52,19 +53,21 @@ shared_examples "a Containers" do
     end
   end
 
-  describe ".reconfigure" do
+  describe ".install" do
     it "should have capacity of containers configured" do
-      @containers.reconfigure({small: 1})
+      @containers.install({small: 1})
       expect(@containers.total_space).to eq(Capacity.new(4))
     end
     it "should have capacity of containers combined" do
-      @containers.reconfigure({small: 2, medium: 2})
+      @containers.install({small: 2, medium: 2})
       expect(@containers.total_space).to eq(Capacity.new(20))
     end
-    it "should not change if already configured" do
+    it "should fail if already configured" do
       @containers = described_class.configure({small: 2})
-      @containers.reconfigure({small: 4})
-      expect(@containers.total_space).to eq(Capacity.new(8))
+
+      expect {
+        @containers.install({small: 4})
+      }.to raise_error(AlreadyInstalled)
     end
   end
 
@@ -77,7 +80,7 @@ shared_examples "a Containers" do
     end
 
     it "should show current configuration" do
-      @containers.reconfigure({small: 2, medium: 4, large: 5})
+      @containers.install({small: 2, medium: 4, large: 5})
       conf = @containers.configuration
       expect(conf.small).to eq(2)
       expect(conf.medium).to eq(4)

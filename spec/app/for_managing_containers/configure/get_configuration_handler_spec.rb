@@ -24,11 +24,7 @@ RSpec.describe "GetConfigurationHandler" do
 
       handler = GetConfigurationHandler.new(containers)
       response = handler.handle(GetConfiguration.new)
-      expected = GetConfigurationResponse.new(
-        small: 0,
-        medium: 0,
-        large: 0
-      )
+      expected = GetConfigurationResponse.new(0, 0, 0)
       expect(response).to eq(expected)
     end
   end

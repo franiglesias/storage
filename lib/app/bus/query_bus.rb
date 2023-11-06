@@ -13,7 +13,7 @@ class QueryBus
 
   def execute(command)
     if command.instance_of?(AvailableContainer)
-      AvailableContainerHandler.new(@containers, @queue).handle(command)
+      return AvailableContainerHandler.new(@containers, @queue).handle(command)
     end
     if command.instance_of?(GetConfiguration)
       GetConfigurationHandler.new(@containers).handle(command)

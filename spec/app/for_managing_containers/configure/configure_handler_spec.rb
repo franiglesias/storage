@@ -8,7 +8,7 @@ require_relative "../../../../lib/app/domain/container/capacity"
 
 RSpec.describe "ConfigureHandler" do
   context "Containers not configured" do
-    it "should reconfigure with passed configuration" do
+    it "should install with passed configuration" do
       containers = InMemoryContainers.configure({})
       handler = ConfigureHandler.new(containers)
       handler.handle(Configure.new({small: 3}))

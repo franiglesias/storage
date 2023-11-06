@@ -9,6 +9,6 @@ class ConfigureHandler
     if (configure.conf == {}) && !@containers.configured?
       raise ContainersNotYetConfigured.new
     end
-    @containers.reconfigure(configure.conf)
+    @containers.install(configure.conf)
   end
 end
